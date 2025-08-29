@@ -1,66 +1,91 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const morgan = require('morgan');
-const path = require('path');
+const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const http = require('http');
+const socketIo = require('socket.io');
 
 // 加载环境变量
 dotenv.config();
 
-// 导入数据库连接
-const db = require('./config/db');
+// 数据库连接
+const db = require('./db/connection');
 
-// 初始化Express应用
+// 路由导入
+const authRoutes = require('./routes/auth.routes');
+const projectRoutes = require('./routes/project.routes');
+const taskRoutes = require('./routes/task.routes');
+const sprintRoutes = require('./routes/sprint.routes');
+const userRoutes = require('./routes/user.routes');
+
+// 中间件导入
+const { authMiddleware } = require('./middleware/auth.middleware');
+
 const app = express();
-
-// 中间件
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-app.use(helmet());
-app.use(morgan('dev'));
-
-// 定义路由
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/users', require('./routes/users'));
-app.use('/api/projects', require('./routes/projects'));
-app.use('/api/projects/:projectId/sprints', require('./routes/sprints'));
-app.use('/api/projects/:projectId/tasks', require('./routes/tasks'));
-app.use('/api/projects/:projectId/stories', require('./routes/stories'));
-app.use('/api/projects/:projectId/epics', require('./routes/epics'));
-app.use('/api/projects/:projectId/bugs', require('./routes/bugs'));
-app.use('/api/projects/:projectId/documents', require('./routes/documents'));
-app.use('/api/projects/:projectId/releases', require('./routes/releases'));
-
-// 在生产环境中提供静态资源
-if (process.env.NODE_ENV === 'production') {
-  // 设置静态文件夹
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-  // 所有未匹配的路由返回React应用
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
-  });
-}
-
-// 错误处理中间件
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ msg: '服务器错误' });
-});
-
-// 设置端口并启动服务器
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`服务器运行在端口 ${PORT}`));
-
-// 测试数据库连接
-db.query('SELECT NOW()', (err, res) => {
-  if (err) {
-    console.error('数据库连接失败:', err);
-  } else {
-    console.log('数据库连接成功:', res.rows[0]);
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: process.env.NODE_ENV === 'production' 
+      ? 'https://your-production-domain.com' 
+      : 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
-module.exports = app; // 为测试导出
+// 中间件配置
+app.use(helmet());
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// 基础路由
+app.get('/', (req, res) => {
+  res.json({ message: '敏捷开发团队管理系统 API' });
+});
+
+// API路由
+app.use('/api/auth', authRoutes);
+app.use('/api/projects', authMiddleware, projectRoutes);
+app.use('/api/tasks', authMiddleware, taskRoutes);
+app.use('/api/sprints', authMiddleware, sprintRoutes);
+app.use('/api/users', authMiddleware, userRoutes);
+
+// WebSocket连接处理
+io.on('connection', (socket) => {
+  console.log('用户已连接:', socket.id);
+  
+  // 加入项目房间
+  socket.on('join-project', (projectId) => {
+    socket.join(`project-${projectId}`);
+    console.log(`用户 ${socket.id} 加入项目 ${projectId}`);
+  });
+  
+  // 任务更新
+  socket.on('task-update', (data) => {
+    socket.to(`project-${data.projectId}`).emit('task-updated', data);
+  });
+  
+  // 断开连接
+  socket.on('disconnect', () => {
+    console.log('用户已断开连接:', socket.id);
+  });
+});
+
+// 启动服务器
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`服务器运行在端口 ${PORT}`);
+});
+
+// 处理未捕获的异常
+process.on('uncaughtException', (error) => {
+  console.error('未捕获的异常:', error);
+});
+
+process.on('unhandledRejection', (error) => {
+  console.error('未处理的Promise拒绝:', error);
+});
+
+module.exports = { app, server, io };
