@@ -1,0 +1,22 @@
+---
+description: 
+globs:
+alwaysApply: false
+---
+# 开发过程
+
+这是一个规则文件，用于帮助 AI 理解您的代码库和遵循项目约定。
+1.	开发流程
+	•	每个新功能必须先写 User Story。
+	•	功能实现包括：前端组件 + 后端接口 + 单元测试 + 文档更新。
+2.	测试要求
+	•	前端测试：Jest + React Testing Library。
+	•	后端测试：Jest（Node.js）或 JUnit（Spring Boot）。
+	•	核心 API 覆盖率 ≥ 60%。
+3.	敏捷支持
+	•	必须包含 Sprint、任务管理、看板、燃尽图的最小实现。
+	•	如果 AI 生成了管理功能 → 必须映射到敏捷团队角色（Scrum Master / PO / Dev / QA）。
+4.	Git 规范
+	•	分支：main（稳定）、dev（开发）、feature/*（功能）。
+	•	提交信息遵循 Conventional Commits 规范。
+    •	按照github flow的规则，不要在main分支上直接工作，而是通过pull request请求合并。
