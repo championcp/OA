@@ -18,6 +18,9 @@ const projectRoutes = require('./routes/project.routes');
 const taskRoutes = require('./routes/task.routes');
 const sprintRoutes = require('./routes/sprint.routes');
 const userRoutes = require('./routes/user.routes');
+const improvementRoutes = require('./routes/improvement.routes');
+const retrospectiveRoutes = require('./routes/retrospective.routes');
+const velocityRoutes = require('./routes/velocity.routes');
 
 // 中间件导入
 const { authMiddleware } = require('./middleware/auth.middleware');
@@ -51,6 +54,9 @@ app.use('/api/projects', authMiddleware, projectRoutes);
 app.use('/api/tasks', authMiddleware, taskRoutes);
 app.use('/api/sprints', authMiddleware, sprintRoutes);
 app.use('/api/users', authMiddleware, userRoutes);
+app.use('/api/improvements', authMiddleware, improvementRoutes);
+app.use('/api/retrospectives', authMiddleware, retrospectiveRoutes);
+app.use('/api/analytics', authMiddleware, velocityRoutes);
 
 // WebSocket连接处理
 io.on('connection', (socket) => {
