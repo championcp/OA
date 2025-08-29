@@ -3,6 +3,7 @@ const Project = require('./project.model');
 const Task = require('./task.model');
 const Sprint = require('./sprint.model');
 const TaskDependency = require('./taskDependency.model');
+const ImprovementAction = require('./improvementAction.model');
 
 // 用户与项目的多对多关系（通过ProjectMember表）
 const ProjectMember = require('./projectMember.model');
@@ -44,11 +45,29 @@ Task.belongsToMany(Task, {
   otherKey: 'sourceTaskId'
 });
 
+// Sprint与改进措施的一对多关系
+Sprint.hasMany(ImprovementAction, { 
+  foreignKey: 'sprintId', 
+  as: 'improvementActions' 
+});
+ImprovementAction.belongsTo(Sprint, { foreignKey: 'sprintId' });
+
+// 用户与改进措施的关系（作为负责人）
+User.hasMany(ImprovementAction, { 
+  foreignKey: 'assignedTo', 
+  as: 'assignedImprovements' 
+});
+ImprovementAction.belongsTo(User, { 
+  foreignKey: 'assignedTo', 
+  as: 'assignee' 
+});
+
 module.exports = {
   User,
   Project,
   Task,
   Sprint,
   TaskDependency,
-  ProjectMember
+  ProjectMember,
+  ImprovementAction
 };
