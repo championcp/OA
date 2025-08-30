@@ -21,9 +21,11 @@ const userRoutes = require('./routes/user.routes');
 const improvementRoutes = require('./routes/improvement.routes');
 const retrospectiveRoutes = require('./routes/retrospective.routes');
 const velocityRoutes = require('./routes/velocity.routes');
+const qualityRoutes = require('./routes/quality.routes');
+const favoriteRoutes = require('./routes/favorite.routes');
 
 // 中间件导入
-const { authMiddleware } = require('./middleware/auth.middleware');
+const { authMiddleware, checkPermission, reportAuth } = require('./middleware/auth.middleware');
 
 const app = express();
 const server = http.createServer(app);
@@ -57,6 +59,11 @@ app.use('/api/users', authMiddleware, userRoutes);
 app.use('/api/improvements', authMiddleware, improvementRoutes);
 app.use('/api/retrospectives', authMiddleware, retrospectiveRoutes);
 app.use('/api/analytics', authMiddleware, velocityRoutes);
+app.use('/api/quality', authMiddleware, checkPermission('view_reports'), qualityRoutes);
+app.use('/api/favorites', authMiddleware, favoriteRoutes);
+app.use('/api/shares', authMiddleware, shareRoutes);
+app.use('/api/reports/:reportId', authMiddleware, reportAuth);
+app.use('/shared', shareRoutes); // 公开访问路由
 
 // WebSocket连接处理
 io.on('connection', (socket) => {

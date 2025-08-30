@@ -33,7 +33,13 @@ const ProjectMember = sequelize.define('ProjectMember', {
       view: true,
       edit: false,
       delete: false,
-      manage: false
+      manage: false,
+      view_reports: true,
+      create_reports: false,
+      edit_reports: false,
+      delete_reports: false,
+      share_reports: false,
+      schedule_reports: false
     }
   }
 }, {

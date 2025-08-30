@@ -45,6 +45,16 @@ const Sidebar = () => {
               Tasks
             </NavLink>
           </li>
+          <li>
+            <NavLink 
+              to="/reports" 
+              className={({ isActive }) => 
+                `flex items-center p-2 rounded ${isActive ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-100'}`
+              }
+            >
+              Reports
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </aside>
