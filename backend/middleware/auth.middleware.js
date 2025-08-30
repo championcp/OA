@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../db/models');
+const { User, ProjectMember, Project, Report } = require('../db/models');
 
 const authMiddleware = async (req, res, next) => {
   try {
@@ -13,8 +13,13 @@ const authMiddleware = async (req, res, next) => {
     // 验证token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // 查找用户
-    const user = await User.findByPk(decoded.id);
+    // 查找用户及相关项目成员信息
+    const user = await User.findByPk(decoded.id, {
+      include: [{
+        model: ProjectMember,
+        as: 'projectMemberships'
+      }]
+    });
     
     if (!user) {
       return res.status(401).json({ message: '用户不存在' });
@@ -79,7 +84,33 @@ const checkPermission = (requiredPermission) => {
   };
 };
 
+// 报表权限检查
+const reportAuth = async (req, res, next) => {
+  try {
+    const { reportId } = req.params;
+    const report = await Report.findByPk(reportId, {
+      include: [{
+        model: Project,
+        include: [{
+          model: ProjectMember,
+          where: { userId: req.user.id }
+        }]
+      }]
+    });
+    
+    if (!report) {
+      return res.status(403).json({ message: '报表未找到或无权访问' });
+    }
+    
+    next();
+  } catch (error) {
+    console.error('报表权限检查错误:', error);
+    return res.status(500).json({ message: '服务器内部错误' });
+  }
+};
+
 module.exports = {
   authMiddleware,
-  checkPermission
+  checkPermission,
+  reportAuth
 };
