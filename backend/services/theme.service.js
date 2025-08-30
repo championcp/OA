@@ -1,0 +1,1 @@
+[SYSTEM: Tool results optimized for context window]
