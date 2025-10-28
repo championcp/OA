@@ -1,5 +1,5 @@
-const { Pool } = require('pg');
-const dotenv = require('dotenv');
+import { Pool } from 'pg';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -13,7 +13,5 @@ const pool = new Pool({
 });
 
 // 导出查询方法
-module.exports = {
-  query: (text, params) => pool.query(text, params),
-  getClient: () => pool.connect(),
-};
+export const query = (text, params) => pool.query(text, params);
+export const getClient = () => pool.connect();

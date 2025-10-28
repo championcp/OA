@@ -1,9 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router({ mergeParams: true });
 const { check, validationResult } = require('express-validator');
-const auth = require('../middleware/auth');
-const logger = require('../middleware/logger');
-const db = require('../config/db');
+import auth from '../middleware/auth.js';
+import logger from '../middleware/logger.js';
+import db from '../config/db.js';
 
 // @route   POST api/projects/:projectId/documents
 // @desc    创建文档
@@ -348,4 +348,4 @@ router.delete(
   }
 );
 
-module.exports = router;
+export default router;

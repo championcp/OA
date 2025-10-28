@@ -1,10 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const auth = require('../middleware/auth.middleware');
-const favoriteService = require('../services/favorite.service');
+import auth from '../middleware/auth.middleware.js';
+const { authMiddleware } = auth;
+import favoriteService from '../services/favorite.service.js';
 
 // 添加收藏
-router.post('/', auth, async (req, res) => {
+router.post('/', auth.authMiddleware, async (req, res) => {
   try {
     const { reportId, tags } = req.body;
     const favorite = await favoriteService.addFavorite(req.user.id, reportId, tags);
@@ -15,7 +16,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 // 移除收藏
-router.delete('/:reportId', auth, async (req, res) => {
+router.delete('/:reportId', auth.authMiddleware, async (req, res) => {
   try {
     const { reportId } = req.params;
     const success = await favoriteService.removeFavorite(req.user.id, reportId);
@@ -26,7 +27,7 @@ router.delete('/:reportId', auth, async (req, res) => {
 });
 
 // 获取用户收藏
-router.get('/', auth, async (req, res) => {
+router.get('/', auth.authMiddleware, async (req, res) => {
   try {
     const favorites = await favoriteService.getUserFavorites(req.user.id, req.query);
     res.json(favorites);
@@ -36,7 +37,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // 更新收藏标签
-router.put('/:reportId/tags', auth, async (req, res) => {
+router.put('/:reportId/tags', auth.authMiddleware, async (req, res) => {
   try {
     const { reportId } = req.params;
     const { tags } = req.body;
@@ -48,7 +49,7 @@ router.put('/:reportId/tags', auth, async (req, res) => {
 });
 
 // 检查收藏状态
-router.get('/:reportId/status', auth, async (req, res) => {
+router.get('/:reportId/status', auth.authMiddleware, async (req, res) => {
   try {
     const { reportId } = req.params;
     const isFavorite = await favoriteService.isFavorite(req.user.id, reportId);
@@ -58,4 +59,4 @@ router.get('/:reportId/status', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

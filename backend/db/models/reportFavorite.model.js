@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../connection');
+import { DataTypes } from 'sequelize';
+import sequelize from '../connection.js';
 
 const ReportFavorite = sequelize.define('ReportFavorite', {
   id: {
@@ -43,4 +43,4 @@ const ReportFavorite = sequelize.define('ReportFavorite', {
   ]
 });
 
-module.exports = ReportFavorite;
+export default ReportFavorite;

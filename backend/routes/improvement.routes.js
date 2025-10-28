@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const auth = require('../middleware/auth.middleware');
-const { ImprovementAction, Sprint, User } = require('../db/models');
-const improvementService = require('../services/improvement.service');
+import auth from '../middleware/auth.middleware.js';
+import { ImprovementAction, Sprint, User } from '../db/models/index.js';
+import improvementService from '../services/improvement.service.js';
 
 // 获取Sprint的改进措施列表
-router.get('/sprint/:sprintId/improvements', auth, async (req, res) => {
+router.get('/sprint/:sprintId/improvements', auth.authMiddleware, async (req, res) => {
   try {
     const { sprintId } = req.params;
     const improvements = await improvementService.getSprintImprovements(sprintId);
@@ -16,7 +16,7 @@ router.get('/sprint/:sprintId/improvements', auth, async (req, res) => {
 });
 
 // 创建改进措施
-router.post('/sprint/:sprintId/improvements', auth, async (req, res) => {
+router.post('/sprint/:sprintId/improvements', auth.authMiddleware, async (req, res) => {
   try {
     const { sprintId } = req.params;
     const improvement = await improvementService.createImprovementAction(sprintId, req.body);
@@ -27,7 +27,7 @@ router.post('/sprint/:sprintId/improvements', auth, async (req, res) => {
 });
 
 // 更新改进措施状态
-router.patch('/improvements/:actionId/status', auth, async (req, res) => {
+router.patch('/improvements/:actionId/status', auth.authMiddleware, async (req, res) => {
   try {
     const { actionId } = req.params;
     const { status, notes } = req.body;
@@ -45,7 +45,7 @@ router.patch('/improvements/:actionId/status', auth, async (req, res) => {
 });
 
 // 获取项目改进措施统计
-router.get('/project/:projectId/improvements/stats', auth, async (req, res) => {
+router.get('/project/:projectId/improvements/stats', auth.authMiddleware, async (req, res) => {
   try {
     const { projectId } = req.params;
     const stats = await improvementService.trackImprovementProgress(projectId);
@@ -56,7 +56,7 @@ router.get('/project/:projectId/improvements/stats', auth, async (req, res) => {
 });
 
 // 生成改进报告
-router.get('/project/:projectId/improvements/report', auth, async (req, res) => {
+router.get('/project/:projectId/improvements/report', auth.authMiddleware, async (req, res) => {
   try {
     const { projectId } = req.params;
     const { startDate, endDate } = req.query;
@@ -78,7 +78,7 @@ router.get('/project/:projectId/improvements/report', auth, async (req, res) => 
 });
 
 // 获取单个改进措施详情
-router.get('/improvements/:actionId', auth, async (req, res) => {
+router.get('/improvements/:actionId', auth.authMiddleware, async (req, res) => {
   try {
     const { actionId } = req.params;
     const improvement = await ImprovementAction.findByPk(actionId, {
@@ -99,7 +99,7 @@ router.get('/improvements/:actionId', auth, async (req, res) => {
 });
 
 // 更新改进措施
-router.put('/improvements/:actionId', auth, async (req, res) => {
+router.put('/improvements/:actionId', auth.authMiddleware, async (req, res) => {
   try {
     const { actionId } = req.params;
     const [affectedRows] = await ImprovementAction.update(req.body, {
@@ -118,7 +118,7 @@ router.put('/improvements/:actionId', auth, async (req, res) => {
 });
 
 // 删除改进措施
-router.delete('/improvements/:actionId', auth, async (req, res) => {
+router.delete('/improvements/:actionId', auth.authMiddleware, async (req, res) => {
   try {
     const { actionId } = req.params;
     const affectedRows = await ImprovementAction.destroy({
@@ -135,4 +135,4 @@ router.delete('/improvements/:actionId', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useGenerateReportMutation } from '../services/reportApi';
-import { useGetTemplatesQuery } from '../services/reportApi';
+import { 
+  useGenerateReportMutation,
+  useGetTemplatesQuery 
+} from '../../services/reportApi';
 
 const ReportGenerator = () => {
   const [searchParams] = useSearchParams();

@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../connection');
+import { DataTypes } from 'sequelize';
+import sequelize from '../connection.js';
 
 const ImprovementAction = sequelize.define('ImprovementAction', {
   id: {
@@ -94,10 +94,13 @@ const ImprovementAction = sequelize.define('ImprovementAction', {
 });
 
 // 关联关系
-ImprovementAction.belongsTo(require('./sprint.model'), { foreignKey: 'sprintId' });
-ImprovementAction.belongsTo(require('./user.model'), { 
+import Sprint from './sprint.model.js';
+import User from './user.model.js';
+
+ImprovementAction.belongsTo(Sprint, { foreignKey: 'sprintId' });
+ImprovementAction.belongsTo(User, { 
   foreignKey: 'assignedTo',
   as: 'assignee'
 });
 
-module.exports = ImprovementAction;
+export default ImprovementAction;

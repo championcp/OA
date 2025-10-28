@@ -1,0 +1,25 @@
+---
+description: 
+globs:
+alwaysApply: true
+---
+# 代码规范
+
+这是一个规则文件，用于帮助 AI 理解您的代码库和遵循项目约定。
+1.	技术栈
+	•	前端必须使用 React + TailwindCSS。
+	•	后端必须使用 Node.js (Express) 或 Spring Boot（二选一，全程保持一致）。
+	•	数据库必须使用 PostgreSQL。
+	•	API 必须是 RESTful，返回 JSON。
+2.	代码规范
+	•	JS/TS 使用 ESLint + Prettier；Java 使用 Checkstyle。
+	•	变量命名 camelCase，类/组件命名 PascalCase。
+	•	注释解释业务逻辑，而非仅解释语法。
+3.	安全与合规
+	•	禁止明文存储密码，必须使用哈希（bcrypt/argon2）。
+	•	所有权限相关操作必须记录日志，可追溯。
+	•	不允许在代码中硬编码敏感信息，必须通过 .env 配置。
+4.	目录与结构
+	•	前后端分离：frontend/、backend/。
+	•	所有模块必须有 README.md。
+	•	API 文档统一放在 docs/api/。

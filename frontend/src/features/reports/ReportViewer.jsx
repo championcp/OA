@@ -1,5 +1,7 @@
 import React from 'react';
-import { useGetReportQuery } from '../services/reportApi';
+import { useGetReportQuery } from '../../services/reportApi';
+import FavoriteButton from '../../components/FavoriteButton';
+import ShareButton from '../../components/ShareButton';
 import VelocityReport from './VelocityReport';
 import BurnDownReport from './BurnDownReport';
 import CumulativeFlowReport from './CumulativeFlowReport';

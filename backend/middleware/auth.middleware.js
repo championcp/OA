@@ -1,5 +1,8 @@
-const jwt = require('jsonwebtoken');
-const { User, ProjectMember, Project, Report } = require('../db/models');
+import jwt from 'jsonwebtoken';
+import User from '../db/models/user.model.js';
+import ProjectMember from '../db/models/projectMember.model.js';
+import Project from '../db/models/project.model.js';
+import Report from '../db/models/report.model.js';
 
 const authMiddleware = async (req, res, next) => {
   try {
@@ -60,7 +63,7 @@ const checkPermission = (requiredPermission) => {
       }
       
       // 查找用户在项目中的权限
-      const { ProjectMember } = require('../db/models');
+      // 已经在上方导入ProjectMember
       const membership = await ProjectMember.findOne({
         where: {
           userId,
@@ -109,8 +112,10 @@ const reportAuth = async (req, res, next) => {
   }
 };
 
-module.exports = {
+const auth = {
   authMiddleware,
   checkPermission,
   reportAuth
 };
+
+export default auth;

@@ -1,5 +1,5 @@
-const { Sprint, Task } = require('../db/models');
-const { Op } = require('sequelize');
+import { Sprint, Task } from '../db/models/index.js';
+import { Op } from 'sequelize';
 
 class VelocityService {
   // 计算团队速度
@@ -299,4 +299,5 @@ class VelocityService {
   }
 }
 
-module.exports = new VelocityService();
+const velocityService = new VelocityService();
+export default velocityService;

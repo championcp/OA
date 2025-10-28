@@ -1,13 +1,13 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { check } = require('express-validator');
-const { authMiddleware, checkPermission } = require('../middleware/auth.middleware');
-const { Task, TaskDependency, Project } = require('../db/models');
-const { Op } = require('sequelize');
+import { check } from 'express-validator';
+import auth from '../middleware/auth.middleware.js';
+import { Task, TaskDependency, Project, User } from '../db/models/index.js';
+import { Op } from 'sequelize';
 
 // 创建任务
 router.post('/', 
-  authMiddleware,
+  auth.authMiddleware,
   [
     check('title').notEmpty().withMessage('任务标题不能为空'),
     check('projectId').notEmpty().withMessage('必须指定项目ID'),
@@ -35,7 +35,7 @@ router.post('/',
 );
 
 // 获取任务列表
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', auth.authMiddleware, async (req, res) => {
   try {
     const { projectId, sprintId, assigneeId, status } = req.query;
     const where = {};
@@ -63,7 +63,7 @@ router.get('/', authMiddleware, async (req, res) => {
 
 // 获取任务详情
 router.get('/:id', 
-  authMiddleware,
+  auth.authMiddleware,
   async (req, res) => {
     try {
       const task = await Task.findByPk(req.params.id, {
@@ -104,7 +104,7 @@ router.get('/:id',
 
 // 更新任务
 router.put('/:id', 
-  authMiddleware,
+  auth.authMiddleware,
   async (req, res) => {
     try {
       const task = await Task.findByPk(req.params.id);
@@ -136,7 +136,7 @@ router.put('/:id',
 
 // 删除任务
 router.delete('/:id', 
-  authMiddleware,
+  auth.authMiddleware,
   async (req, res) => {
     try {
       const task = await Task.findByPk(req.params.id);
@@ -168,7 +168,7 @@ router.delete('/:id',
 
 // 添加任务依赖
 router.post('/:id/dependencies', 
-  authMiddleware,
+  auth.authMiddleware,
   [
     check('targetTaskId').notEmpty().withMessage('必须指定依赖的任务ID'),
     check('type').isIn(['finish_to_start', 'start_to_start', 'finish_to_finish', 'start_to_finish'])
@@ -228,7 +228,7 @@ router.post('/:id/dependencies',
 
 // 删除任务依赖
 router.delete('/:id/dependencies/:dependencyId', 
-  authMiddleware,
+  auth.authMiddleware,
   async (req, res) => {
     try {
       const dependency = await TaskDependency.findByPk(req.params.dependencyId);
@@ -254,7 +254,7 @@ router.delete('/:id/dependencies/:dependencyId',
 
 // 检查项目权限的辅助函数
 async function checkProjectPermission(userId, projectId, permission) {
-  const { ProjectMember } = require('../db/models');
+  const { ProjectMember } = await import('../db/models/index.js');
   
   // 管理员拥有所有权限
   const user = await User.findByPk(userId);
@@ -292,4 +292,4 @@ async function checkCircularDependency(sourceTaskId, targetTaskId, visited = new
   return false;
 }
 
-module.exports = router;
+export default router;

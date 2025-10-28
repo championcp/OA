@@ -1,5 +1,5 @@
 // 角色检查中间件
-module.exports = function(roles) {
+export default function(roles) {
   return function(req, res, next) {
     // 确保用户已通过认证
     if (!req.user) {

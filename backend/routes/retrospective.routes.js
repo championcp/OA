@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const auth = require('../middleware/auth.middleware');
-const templateService = require('../services/retrospectiveTemplate.service');
+import auth from '../middleware/auth.middleware.js';
+import templateService from '../services/retrospectiveTemplate.service.js';
 
 // 获取所有回顾模板
-router.get('/templates', auth, (req, res) => {
+router.get('/templates', auth.authMiddleware, (req, res) => {
   try {
     const templates = templateService.getAllTemplates();
     res.json(templates);
@@ -14,7 +14,7 @@ router.get('/templates', auth, (req, res) => {
 });
 
 // 根据ID获取模板详情
-router.get('/templates/:templateId', auth, (req, res) => {
+router.get('/templates/:templateId', auth.authMiddleware, (req, res) => {
   try {
     const { templateId } = req.params;
     const template = templateService.getTemplateById(templateId);
@@ -30,7 +30,7 @@ router.get('/templates/:templateId', auth, (req, res) => {
 });
 
 // 搜索模板
-router.get('/templates/search/:query', auth, (req, res) => {
+router.get('/templates/search/:query', auth.authMiddleware, (req, res) => {
   try {
     const { query } = req.params;
     const results = templateService.searchTemplates(query);
@@ -41,7 +41,7 @@ router.get('/templates/search/:query', auth, (req, res) => {
 });
 
 // 创建自定义模板
-router.post('/templates', auth, (req, res) => {
+router.post('/templates', auth.authMiddleware, (req, res) => {
   try {
     const { name, description, categories } = req.body;
     
@@ -62,7 +62,7 @@ router.post('/templates', auth, (req, res) => {
 });
 
 // 更新模板
-router.put('/templates/:templateId', auth, (req, res) => {
+router.put('/templates/:templateId', auth.authMiddleware, (req, res) => {
   try {
     const { templateId } = req.params;
     const updatedTemplate = templateService.updateTemplate(templateId, req.body);
@@ -78,7 +78,7 @@ router.put('/templates/:templateId', auth, (req, res) => {
 });
 
 // 删除自定义模板
-router.delete('/templates/:templateId', auth, (req, res) => {
+router.delete('/templates/:templateId', auth.authMiddleware, (req, res) => {
   try {
     const { templateId } = req.params;
     const success = templateService.deleteTemplate(templateId);
@@ -94,7 +94,7 @@ router.delete('/templates/:templateId', auth, (req, res) => {
 });
 
 // 获取模板建议
-router.post('/templates/suggestions', auth, (req, res) => {
+router.post('/templates/suggestions', auth.authMiddleware, (req, res) => {
   try {
     const suggestions = templateService.getTemplateSuggestions(req.body);
     res.json(suggestions);
@@ -104,7 +104,7 @@ router.post('/templates/suggestions', auth, (req, res) => {
 });
 
 // 导出模板
-router.get('/templates/:templateId/export', auth, (req, res) => {
+router.get('/templates/:templateId/export', auth.authMiddleware, (req, res) => {
   try {
     const { templateId } = req.params;
     const { format = 'json' } = req.query;
@@ -126,7 +126,7 @@ router.get('/templates/:templateId/export', auth, (req, res) => {
 });
 
 // 获取模板统计信息
-router.get('/templates/stats', auth, (req, res) => {
+router.get('/templates/stats', auth.authMiddleware, (req, res) => {
   try {
     const templates = templateService.getAllTemplates();
     const stats = {
@@ -146,4 +146,4 @@ router.get('/templates/stats', auth, (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

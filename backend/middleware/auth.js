@@ -1,10 +1,10 @@
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
 // 认证中间件
-module.exports = function(req, res, next) {
+export default function(req, res, next) {
   // 从请求头获取token
   const token = req.header('x-auth-token');
   

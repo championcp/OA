@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../connection');
+import { DataTypes } from 'sequelize';
+import sequelize from '../connection.js';
 
 const Sprint = sequelize.define('Sprint', {
   id: {
@@ -66,4 +66,4 @@ const Sprint = sequelize.define('Sprint', {
   timestamps: true
 });
 
-module.exports = Sprint;
+export default Sprint;

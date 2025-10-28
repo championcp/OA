@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../connection');
+import { DataTypes } from 'sequelize';
+import sequelize from '../connection.js';
 
 const Project = sequelize.define('Project', {
   id: {
@@ -52,4 +52,4 @@ const Project = sequelize.define('Project', {
   timestamps: true
 });
 
-module.exports = Project;
+export default Project;

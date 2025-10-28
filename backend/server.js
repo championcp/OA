@@ -1,35 +1,37 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
-const http = require('http');
-const socketIo = require('socket.io');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import http from 'http';
+import { Server as SocketIOServer } from 'socket.io';
 
 // 加载环境变量
 dotenv.config();
 
 // 数据库连接
-const db = require('./db/connection');
+import db from './db/connection.js';
 
 // 路由导入
-const authRoutes = require('./routes/auth.routes');
-const projectRoutes = require('./routes/project.routes');
-const taskRoutes = require('./routes/task.routes');
-const sprintRoutes = require('./routes/sprint.routes');
-const userRoutes = require('./routes/user.routes');
-const improvementRoutes = require('./routes/improvement.routes');
-const retrospectiveRoutes = require('./routes/retrospective.routes');
-const velocityRoutes = require('./routes/velocity.routes');
-const qualityRoutes = require('./routes/quality.routes');
-const favoriteRoutes = require('./routes/favorite.routes');
+import authRoutes from './routes/auth.routes.js';
+import projectRoutes from './routes/project.routes.js';
+import taskRoutes from './routes/task.routes.js';
+import sprintRoutes from './routes/sprint.routes.js';
+import userRoutes from './routes/users.js';
+import improvementRoutes from './routes/improvement.routes.js';
+import retrospectiveRoutes from './routes/retrospective.routes.js';
+import velocityRoutes from './routes/velocity.routes.js';
+import qualityRoutes from './routes/quality.routes.js';
+import favoriteRoutes from './routes/favorite.routes.js';
+import shareRoutes from './routes/share.routes.js';
 
 // 中间件导入
-const { authMiddleware, checkPermission, reportAuth } = require('./middleware/auth.middleware');
+import auth from './middleware/auth.middleware.js';
+const { authMiddleware, checkPermission, reportAuth } = auth;
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
+const io = new SocketIOServer(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
       ? 'https://your-production-domain.com' 
@@ -87,7 +89,7 @@ io.on('connection', (socket) => {
 });
 
 // 启动服务器
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5003;
 server.listen(PORT, () => {
   console.log(`服务器运行在端口 ${PORT}`);
 });
@@ -101,4 +103,4 @@ process.on('unhandledRejection', (error) => {
   console.error('未处理的Promise拒绝:', error);
 });
 
-module.exports = { app, server, io };
+export { app, server, io };

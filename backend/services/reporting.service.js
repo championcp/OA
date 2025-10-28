@@ -1,6 +1,6 @@
-const { Project, Sprint, Task, TestCase, TestResult } = require('../db/models');
-const { Op } = require('sequelize');
-const qualityMetrics = require('./qualityMetrics.service');
+import { Project, Sprint, Task, TestCase, TestResult } from '../db/models/index.js';
+import { Op } from 'sequelize';
+import qualityMetrics from './qualityMetrics.service.js';
 
 class ReportingService {
   // 预置报表模板
@@ -116,4 +116,5 @@ class ReportingService {
   // 其他报表生成方法...
 }
 
-module.exports = new ReportingService();
+const reportingService = new ReportingService();
+export default reportingService;

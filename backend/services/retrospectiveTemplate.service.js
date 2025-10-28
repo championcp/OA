@@ -333,4 +333,5 @@ class RetrospectiveTemplateService {
   }
 }
 
-module.exports = new RetrospectiveTemplateService();
+const retrospectiveTemplateService = new RetrospectiveTemplateService();
+export default retrospectiveTemplateService;

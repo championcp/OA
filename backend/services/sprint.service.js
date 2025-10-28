@@ -1,4 +1,6 @@
-import { Sprint, Task, ProjectMember } from '../db/models';
+import Sprint from '../db/models/sprint.model.js';
+import Task from '../db/models/task.model.js';
+import ProjectMember from '../db/models/projectMember.model.js';
 import { Op } from 'sequelize';
 
 class SprintService {

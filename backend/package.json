@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "agile-team-management-backend",
   "version": "1.0.0",
   "description": "敏捷开发团队管理系统后端",

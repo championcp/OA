@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../connection');
+import { DataTypes } from 'sequelize';
+import sequelize from '../connection.js';
 
 const ScheduledReport = sequelize.define('ScheduledReport', {
   id: {
@@ -68,4 +68,4 @@ const ScheduledReport = sequelize.define('ScheduledReport', {
   ]
 });
 
-module.exports = ScheduledReport;
+export default ScheduledReport;

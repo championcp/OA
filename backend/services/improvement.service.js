@@ -1,4 +1,5 @@
-import { ImprovementAction, Sprint } from '../db/models';
+import ImprovementAction from '../db/models/improvementAction.model.js';
+import Sprint from '../db/models/sprint.model.js';
 
 class ImprovementService {
   // 创建改进措施

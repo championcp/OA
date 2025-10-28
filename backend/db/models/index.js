@@ -1,18 +1,18 @@
-const User = require('./user.model');
-const Project = require('./project.model');
-const Task = require('./task.model');
-const Sprint = require('./sprint.model');
-const TaskDependency = require('./taskDependency.model');
-const ImprovementAction = require('./improvementAction.model');
-const TestCase = require('./testCase.model');
-const TestResult = require('./testResult.model');
-const DefectAnalysis = require('./defectAnalysis.model');
-const ReportFavorite = require('./reportFavorite.model');
-const ShareLink = require('./shareLink.model');
-const ScheduledReport = require('./scheduledReport.model');
+import User from './user.model.js';
+import Project from './project.model.js';
+import Task from './task.model.js';
+import Sprint from './sprint.model.js';
+import TaskDependency from './taskDependency.model.js';
+import ImprovementAction from './improvementAction.model.js';
+import TestCase from './testCase.model.js';
+import TestResult from './testResult.model.js';
+import DefectAnalysis from './defectAnalysis.model.js';
+import ReportFavorite from './reportFavorite.model.js';
+import ShareLink from './shareLink.model.js';
+import ScheduledReport from './scheduledReport.model.js';
 
 // 用户与项目的多对多关系（通过ProjectMember表）
-const ProjectMember = require('./projectMember.model');
+import ProjectMember from './projectMember.model.js';
 User.belongsToMany(Project, { through: ProjectMember, as: 'projects' });
 Project.belongsToMany(User, { through: ProjectMember, as: 'members' });
 
@@ -65,7 +65,7 @@ User.hasMany(ImprovementAction, {
 });
 ImprovementAction.belongsTo(User, { 
   foreignKey: 'assignedTo', 
-  as: 'assignee' 
+  as: 'improvementAssignee' 
 });
 
 // 任务与测试用例的一对多关系
@@ -129,15 +129,15 @@ ShareLink.belongsTo(User, {
   as: 'user'
 });
 
-// 报表与分享链接的关系
-Report.hasMany(ShareLink, {
-  foreignKey: 'reportId',
-  as: 'shareLinks'
-});
-ShareLink.belongsTo(Report, {
-  foreignKey: 'reportId',
-  as: 'report'
-});
+// 注释掉未定义的Report模型关联
+// Report.hasMany(ShareLink, {
+//   foreignKey: 'reportId',
+//   as: 'shareLinks'
+// });
+// ShareLink.belongsTo(Report, {
+//   foreignKey: 'reportId',
+//   as: 'report'
+// });
 
 // 用户与定时报表的关系
 User.hasMany(ScheduledReport, {
@@ -165,7 +165,7 @@ TestResult.belongsTo(Task, {
   as: 'relatedDefect' 
 });
 
-module.exports = {
+export {
   User,
   Project,
   Task,
@@ -175,5 +175,7 @@ module.exports = {
   ImprovementAction,
   TestCase,
   TestResult,
-  DefectAnalysis
+  DefectAnalysis,
+  ShareLink,
+  ScheduledReport
 };

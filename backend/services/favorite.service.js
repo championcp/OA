@@ -1,4 +1,4 @@
-const { ReportFavorite } = require('../db/models');
+import ReportFavorite from '../db/models/reportFavorite.model.js';
 
 class FavoriteService {
   // 添加收藏
@@ -54,4 +54,4 @@ class FavoriteService {
   }
 }
 
-module.exports = new FavoriteService();
+export default new FavoriteService();

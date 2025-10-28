@@ -1,4 +1,107 @@
-state.error = null;
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import projectApi from '../../services/projectApi';
+
+// 异步thunk actions
+export const getProject = createAsyncThunk(
+  'projects/getProject',
+  async (projectId) => {
+    const response = await projectApi.getProject(projectId);
+    return response.data;
+  }
+);
+
+// 创建项目
+export const createProject = createAsyncThunk(
+  'projects/createProject',
+  async (projectData) => {
+    const response = await projectApi.createProject(projectData);
+    return response;
+  }
+);
+
+// 更新项目
+export const updateProject = createAsyncThunk(
+  'projects/updateProject',
+  async ({ projectId, projectData }) => {
+    const response = await projectApi.updateProject(projectId, projectData);
+    return response;
+  }
+);
+
+// 删除项目
+export const deleteProject = createAsyncThunk(
+  'projects/deleteProject',
+  async (projectId) => {
+    const response = await projectApi.deleteProject(projectId);
+    return response;
+  }
+);
+
+// 获取项目成员
+export const getProjectMembers = createAsyncThunk(
+  'projects/getProjectMembers',
+  async (projectId) => {
+    const response = await projectApi.getProjectMembers(projectId);
+    return response;
+  }
+);
+
+// 添加项目成员
+export const addProjectMember = createAsyncThunk(
+  'projects/addProjectMember',
+  async ({ projectId, memberData }) => {
+    const response = await projectApi.addProjectMember(projectId, memberData);
+    return response;
+  }
+);
+
+// 更新项目成员角色
+export const updateProjectMember = createAsyncThunk(
+  'projects/updateProjectMember',
+  async ({ projectId, memberId, memberData }) => {
+    const response = await projectApi.updateProjectMember(projectId, memberId, memberData);
+    return response;
+  }
+);
+
+// 移除项目成员
+export const removeProjectMember = createAsyncThunk(
+  'projects/removeProjectMember',
+  async ({ projectId, memberId }) => {
+    const response = await projectApi.removeProjectMember(projectId, memberId);
+    return response;
+  }
+);
+
+const initialState = {
+  projects: [],
+  currentProject: null,
+  projectMembers: [],
+  loading: false,
+  error: null
+};
+
+const projectSlice = createSlice({
+  name: 'projects',
+  initialState,
+  reducers: {
+    clearCurrentProject: (state) => {
+      state.currentProject = null;
+    },
+    clearProjectError: (state) => {
+      state.error = null;
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getProject.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getProject.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentProject = action.payload;
+        state.error = null;
       })
       .addCase(getProject.rejected, (state, action) => {
         state.loading = false;

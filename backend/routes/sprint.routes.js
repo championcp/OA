@@ -1,6 +1,7 @@
 import express from 'express';
-import { authMiddleware } from '../middleware/auth.middleware';
-import SprintService from '../services/sprint.service';
+import auth from '../middleware/auth.middleware.js';
+const { authMiddleware } = auth;
+import SprintService from '../services/sprint.service.js';
 import { check } from 'express-validator';
 
 const router = express.Router();

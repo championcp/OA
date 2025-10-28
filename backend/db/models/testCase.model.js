@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../connection');
+import { DataTypes } from 'sequelize';
+import sequelize from '../connection.js';
 
 const TestCase = sequelize.define('TestCase', {
   id: {
@@ -87,4 +87,4 @@ const TestCase = sequelize.define('TestCase', {
   ]
 });
 
-module.exports = TestCase;
+export default TestCase;

@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../connection');
+import { DataTypes } from 'sequelize';
+import sequelize from '../connection.js';
 
 const ShareLink = sequelize.define('ShareLink', {
   id: {
@@ -52,4 +52,4 @@ const ShareLink = sequelize.define('ShareLink', {
   ]
 });
 
-module.exports = ShareLink;
+export default ShareLink;

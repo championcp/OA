@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const auth = require('../middleware/auth.middleware');
-const shareService = require('../services/share.service');
+import auth from '../middleware/auth.middleware.js';
+import shareService from '../services/share.service.js';
 
 // 生成分享链接
-router.post('/', auth, async (req, res) => {
+router.post('/', auth.authMiddleware, async (req, res) => {
   try {
     const { reportId, expiryDays, permissions } = req.body;
     const shareLink = await shareService.generateShareLink(
@@ -19,7 +19,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 // 获取用户的分享链接
-router.get('/', auth, async (req, res) => {
+router.get('/', auth.authMiddleware, async (req, res) => {
   try {
     const shareLinks = await shareService.getUserShareLinks(req.user.id);
     res.json(shareLinks);
@@ -29,7 +29,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // 撤销分享链接
-router.delete('/:token', auth, async (req, res) => {
+router.delete('/:token', auth.authMiddleware, async (req, res) => {
   try {
     const { token } = req.params;
     const success = await shareService.revokeShareLink(req.user.id, token);
@@ -58,4 +58,4 @@ router.get('/:token', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

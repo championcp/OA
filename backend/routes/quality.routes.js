@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const auth = require('../middleware/auth.middleware');
-const qualityMetrics = require('../services/qualityMetrics.service');
-const reporting = require('../services/reporting.service');
+import auth from '../middleware/auth.middleware.js';
+import qualityMetrics from '../services/qualityMetrics.service.js';
+import reporting from '../services/reporting.service.js';
 
 // 获取代码覆盖率
-router.get('/projects/:projectId/coverage', auth, async (req, res) => {
+router.get('/projects/:projectId/coverage', auth.authMiddleware, async (req, res) => {
   try {
     const { projectId } = req.params;
     const coverage = await qualityMetrics.calculateCodeCoverage(projectId);
@@ -16,7 +16,7 @@ router.get('/projects/:projectId/coverage', auth, async (req, res) => {
 });
 
 // 获取缺陷密度
-router.get('/projects/:projectId/defect-density', auth, async (req, res) => {
+router.get('/projects/:projectId/defect-density', auth.authMiddleware, async (req, res) => {
   try {
     const { projectId } = req.params;
     const density = await qualityMetrics.calculateDefectDensity(projectId);
@@ -27,7 +27,7 @@ router.get('/projects/:projectId/defect-density', auth, async (req, res) => {
 });
 
 // 获取质量趋势
-router.get('/projects/:projectId/quality-trend', auth, async (req, res) => {
+router.get('/projects/:projectId/quality-trend', auth.authMiddleware, async (req, res) => {
   try {
     const { projectId } = req.params;
     const { period } = req.query;
@@ -39,7 +39,7 @@ router.get('/projects/:projectId/quality-trend', auth, async (req, res) => {
 });
 
 // 生成标准报表
-router.get('/projects/:projectId/reports/standard', auth, async (req, res) => {
+router.get('/projects/:projectId/reports/standard', auth.authMiddleware, async (req, res) => {
   try {
     const { projectId } = req.params;
     const { type } = req.query;
@@ -56,7 +56,7 @@ router.get('/projects/:projectId/reports/standard', auth, async (req, res) => {
 });
 
 // 生成自定义报表
-router.post('/projects/:projectId/reports/custom', auth, async (req, res) => {
+router.post('/projects/:projectId/reports/custom', auth.authMiddleware, async (req, res) => {
   try {
     const { projectId } = req.params;
     const report = await reporting.generateCustomReport(projectId, req.body);
@@ -67,7 +67,7 @@ router.post('/projects/:projectId/reports/custom', auth, async (req, res) => {
 });
 
 // 获取报表模板
-router.get('/projects/:projectId/report-templates', auth, async (req, res) => {
+router.get('/projects/:projectId/report-templates', auth.authMiddleware, async (req, res) => {
   try {
     const templates = reporting.getReportTemplates();
     res.json(templates);
@@ -76,4 +76,4 @@ router.get('/projects/:projectId/report-templates', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

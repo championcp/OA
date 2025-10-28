@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 const { check, validationResult } = require('express-validator');
-const auth = require('../middleware/auth');
-const db = require('../config/db');
+import auth from '../middleware/auth.js';
+import db from '../config/db.js';
 
 // @route   POST api/auth/register
 // @desc    注册用户
@@ -162,4 +162,4 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

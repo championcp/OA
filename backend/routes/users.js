@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
-const bcrypt = require('bcrypt');
-const auth = require('../middleware/auth');
-const roleCheck = require('../middleware/roleCheck');
-const db = require('../config/db');
+import { check, validationResult } from 'express-validator';
+import bcrypt from 'bcrypt';
+import auth from '../middleware/auth.js';
+import roleCheck from '../middleware/roleCheck.js';
+import { query as db } from '../config/db.js';
 
 // @route   GET api/users
 // @desc    获取所有用户
@@ -234,4 +234,4 @@ router.delete('/:id', [auth, roleCheck(['Scrum Master'])], async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const auth = require('../middleware/auth.middleware');
-const schedulerService = require('../services/scheduler.service');
+import auth from '../middleware/auth.middleware.js';
+import schedulerService from '../services/scheduler.service.js';
 
 // 创建定时报表
 router.post('/', auth, async (req, res) => {
@@ -70,4 +70,4 @@ router.get('/project/:projectId', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

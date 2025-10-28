@@ -1,5 +1,5 @@
-const { Task, TestCase, TestResult, Project } = require('../db/models');
-const { Op } = require('sequelize');
+import { Task, TestCase, TestResult, Project } from '../db/models/index.js';
+import { Op } from 'sequelize';
 
 class QualityMetricsService {
   // 计算代码覆盖率
@@ -112,4 +112,5 @@ class QualityMetricsService {
   // 其他辅助方法...
 }
 
-module.exports = new QualityMetricsService();
+const qualityMetricsService = new QualityMetricsService();
+export default qualityMetricsService;

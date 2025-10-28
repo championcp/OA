@@ -1,5 +1,5 @@
-const { ShareLink } = require('../db/models');
-const crypto = require('crypto');
+import { ShareLink } from '../db/models/index.js';
+import crypto from 'crypto';
 
 class ShareService {
   // 生成分享链接
@@ -57,4 +57,5 @@ class ShareService {
   }
 }
 
-module.exports = new ShareService();
+const shareService = new ShareService();
+export default shareService;

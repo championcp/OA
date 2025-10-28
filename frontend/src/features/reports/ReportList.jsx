@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useGetTemplatesQuery } from '../services/reportApi';
+import { useGetTemplatesQuery } from '../../services/reportApi';
 
 const ReportList = () => {
   const { data: templates, isLoading, error } = useGetTemplatesQuery();

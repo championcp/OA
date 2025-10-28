@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../connection');
+import { DataTypes } from 'sequelize';
+import sequelize from '../connection.js';
 
 const Task = sequelize.define('Task', {
   id: {
@@ -101,4 +101,4 @@ const Task = sequelize.define('Task', {
   timestamps: true
 });
 
-module.exports = Task;
+export default Task;
